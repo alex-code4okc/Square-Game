@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><meta charset="utf8">
+
+
+
+<title>Pick a random color!</title>
+
+<style>
+
+.separator {
+width: 200px;
+height: 200px;
+float: left;
+background-color: black;
+border-radius: 5px;
+margin: 10px;
+padding: 10px;
+border-radius: 50%;
+}
+
+.row {
+float:left;
+break:left;
+}
+
+</style>
+
+</head>
+<body><div class="row">
+
+<div id="s1" class="separator" onclick="colorChanger(this)" style="background-color: rgb(211, 32, 238);"></div>
+<div id="s2" class="separator" onclick="colorChanger(this)" style="background-color: rgb(169, 170, 101);"></div>
+<div id="s3" class="separator" onclick="colorChanger(this)" style="background-color: rgb(6, 15, 48);"></div>
+<div id="s4" class="separator" onclick="colorChanger(this)" style="background-color: rgb(100, 16, 158);"></div>
+
+</div>
+
+<div class="row">
+
+<div id="s5" class="separator" onclick="colorChanger(this)" style="background-color: rgb(230, 80, 161);"></div>
+<div id="s6" class="separator" onclick="colorChanger(this)" style="background-color: rgb(56, 102, 208);"></div>
+<div id="s7" class="separator" onclick="colorChanger(this)" style="background-color: rgb(175, 152, 42);"></div>
+<div id="s8" class="separator" onclick="colorChanger(this)" style="background-color: rgb(184, 70, 133);"></div>
+
+</div>
+
+<div class="row">
+
+<div id="s9" class="separator" onclick="colorChanger(this)" style="background-color: rgb(8, 78, 128);"></div>
+<div id="s10" class="separator" onclick="colorChanger(this)" style="background-color: rgb(229, 251, 105);"></div>
+<div id="s11" class="separator" onclick="colorChanger(this)" style="background-color: rgb(144, 195, 67);"></div>
+<div id="s12" class="separator" onclick="colorChanger(this)" style="background-color: rgb(61, 50, 205);"></div>
+
+</div>
+
+<div class="row">
+
+<div id="s13" class="separator" onclick="colorChanger(this)" style="background-color: rgb(43, 190, 230);"></div>
+<div id="s14" class="separator" onclick="colorChanger(this)" style="background-color: rgb(217, 61, 155);"></div>
+<div id="s15" class="separator" onclick="colorChanger(this)" style="background-color: rgb(148, 6, 69);"></div>
+<div id="s16" class="separator" onclick="colorChanger(this)" style="background-color: rgb(41, 186, 220);"></div>
+
+</div>
+
+
+<script>
+function colorChanger(element) {
+//color = document.getElementByClassName("separator").style.backgroundColor;
+
+rgb = [Math.floor(Math.random()*256),Math.floor(Math.random()*256),Math.floor(Math.random()*256)];
+
+element.style.backgroundColor = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+
+//document.getElementByClassName("separator").style.backgroundColor = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+
+console.log(rgb[0],rgb[1],rgb[2]);
+
+/*
+if(color == "black") {
+    document.getElementById("s").style.backgroundColor = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+    console.log(rgb[0],rgb[1],rgb[2]);
+}
+else {
+    document.getElementById("s").style.backgroundColor = "black";
+}*/
+
+}
+</script>
+
+
+
+</body></html>

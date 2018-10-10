@@ -1,0 +1,23 @@
+﻿body {
+    background-color: blanchedalmond;
+}
+.square {
+border-radius: 50%;
+height: 100px;
+width: 100px;
+padding: 10px;
+margin: 10px;
+background-color:dimgrey;
+float: left;
+transition: background-color 1s linear;
+}
+
+.row {
+    float: left;
+    clear:left;
+}
+
+.container {
+    align-content:center;
+    background-color: black;
+}

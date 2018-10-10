@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Can you match all squares?</title>
+    <link href="./square_style.css" rel="stylesheet "type="text/css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div id="sq1" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq2" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq3" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq4" class="square" onclick="colorSelector(this)"></div>
+        </div>
+        <div class="row">
+            <div id="sq5" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq6" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq7" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq8" class="square" onclick="colorSelector(this)"></div>
+        </div>
+        <div class="row">
+            <div id="sq9" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq10" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq11" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq12" class="square" onclick="colorSelector(this)"></div>
+        </div>
+        <div class="row">
+            <div id="sq13" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq14" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq15" class="square" onclick="colorSelector(this)"></div>
+            <div id="sq16" class="square" onclick="colorSelector(this)"></div>
+        </div>
+    </div>
+    
+<script src="jquery-3.2.1.js"></script>
+<script type="text/javascript">
+    function shuffle(array) {
+        var m = array.length, temp, i;
+
+        //while there remain elements to shuffle...
+        while (m) {
+            //Pick a remaining element...
+            i = Math.floor(Math.random() * m--);
+            //and swap it with the current element
+            temp = array[m];
+            array[m] = array[i];
+            array[i] = temp;
+        }
+        return array;
+    }
+    //globals
+
+    //color_array will hold 8 different rgb colors
+    var color_array = [];
+    //grid array will hold the colors based on position
+    var grid = new Array();
+   
+    for (i = 0; i < 8; i++){
+        random_color = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]
+        color_array.push(random_color);
+        //console.log(color_array[i]);
+    }
+
+    //console_array now holds 8 arrays of arrays [[r,b,g],...]
+    //shuffles the color_array
+    color_array = shuffle(color_array);
+
+    //grid will contain 16 random colors, 8 of them unique
+    for (i = 0; i < color_array.length; i++) {
+        grid.push(color_array[i]);
+        //shuffles the grid array
+        //grid = shuffle(grid);
+        grid.push(color_array[i]);
+    }
+
+    //shuffle the grid array. It will contain 8 unique colors represented twice
+    grid = shuffle(grid);
+
+    //globals
+    var firstClicked, secondClicked, clickedDivArray = new Array(), matched_array = new Array(16);
+
+    //an array with 16 elements all of them false
+    matched_array.fill(false);
+
+    function setColor(elem, newColor) {
+        elem.style.backgroundColor = newColor;
+    }
+
+    function matchTwo(color_value, clickedDiv) {
+
+        if (clickedDivArray.length == 0) {
+            clickedDivArray.push(clickedDiv);
+            console.log('first button clicked');
+        }
+        else {
+            if (clickedDivArray.length == 1) {
+                clickedDivArray.push(clickedDiv);//clickedDivArray should now me of length 2
+                //clickedDiv is the unique div that was clicked. Comparison is uniqueness of element, not color
+                if (clickedDivArray[0] == clickedDivArray[1]) {//if the same div clicked again, pop off the second instance
+                    clickedDivArray.pop();//clickedDivArray is now of length 1
+                } else {//clickedDivs were unique
+
+                    if (clickedDivArray[0].style.backgroundColor == clickedDivArray[1].style.backgroundColor) {
+                        //both elements clicked share same background color
+                        index1 = grid.indexOf(clickedDivArray[0].style.backgroundColor);
+                        index2 = grid.lastIndexOf(clickedDivArray[1].style.backgroundColor);
+                        matched_array[index1] = true;
+                        matched_array[index2] = true;
+                        clickedDivArray = new Array();
+
+                    }
+                    else {
+                        console.log(clickedDivArray[1].style.backgroundColor);
+                        //divs did not match in color
+                        current_color = clickedDivArray[1].style.backgroundColor;
+                        setTimeout(setColor(clickedDivArray[1], current_color),1000);
+                        setTimeout(setColor(clickedDivArray[0],'dimgrey'), 1000);
+                        setTimeout(setColor(clickedDivArray[1], 'dimgrey'), 1000);
+                        //setTimeout(clickedDivArray[1].style.backgroundColor = 'dimgrey', 1000);
+                        console.log(clickedDivArray[1].style.backgroundColor);
+                        clickedDivArray = new Array();
+
+                    }
+                }//end of unique clickedDivs Match
+
+            }//end logical check: clickedDivArray.length == 1
+        }
+    }//end of matchTwo function
+    
+   /* function matchTwo(color_value, clickedDiv) {
+
+        if (firstClicked == undefined) {
+            clickedDivArray.push(clickedDiv);
+            firstClicked = color_value;
+            console.log('first button clicked');
+        }
+        else {
+            if (firstClicked != undefined && secondClicked == undefined) {
+                clickedDivArray.push(clickedDiv);
+                //clickedDiv is the unique div that was clicked. Comparison is uniqueness of element, not color
+                if (clickedDivArray[0] == clickedDivArray[1]) {//if the same div clicked again, pop off the second instance
+                    clickedDivArray.pop();
+                } else {
+                    secondClicked = color_value;
+                    console.log('second button clicked');
+                }
+
+                if (firstClicked != undefined && secondClicked != undefined) {
+                    if (firstClicked[0] == secondClicked[0] && firstClicked[1] == secondClicked[1] && firstClicked[2] == secondClicked[2]) {
+                        console.log('first and second button matched!');
+                        //find index positions of first and second clicked in grid array
+                        index1 = grid.indexOf(firstClicked);
+                        index2 = grid.lastIndexOf(secondClicked);
+                        //matched array is updated
+                        matched_array[index1] = true;
+                        matched_array[index2] = true;
+                        //state variables reset
+                        firstClicked = undefined;
+                        secondClicked = undefined;
+                        clickedDivArray = new Array();
+                    }
+                    //if colors of divs clicked do not match
+                    else {
+                        console.log('first and second button did not match, reseting buttons!');
+                        //they did not match: reset colors and global variables
+                        clickedDivArray[0].style.transition = 'background-color 1s linear';
+                        clickedDivArray[1].style.transition = 'background-color 1s linear';
+                        //no delay is applied to changing to dimgrey even with the delay specified in css
+                        clickedDivArray[1].style.backgroundColor = 'rbg(' + color_value[0] + ',' + color_value[1] + ',' + color_value[2] + ')';
+                        clickedDivArray[0].style.backgroundColor = 'dimgrey';
+                        clickedDivArray[1].style.backgroundColor = 'dimgrey';
+                        firstClicked = undefined;
+                        secondClicked = undefined;
+                        clickedDivArray = new Array();//reseting the clickedDivArray
+                    }
+                }
+            }
+        }
+    } */
+
+    function colorSelector(element) {
+        elem_id = element.id;
+        switch (elem_id) {
+            case "sq1":
+                grid_index = Number(elem_id.split('sq')[1])-1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[0]);
+                matchTwo(rgb,element);
+                break;
+            case "sq2":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[1]);
+                matchTwo(rgb, element);
+                break;
+            case "sq3":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[2]);
+                matchTwo(rgb,element);
+                break;
+            case "sq4":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[3]);
+                matchTwo(rgb,element);
+                break;
+            case "sq5":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[4]);
+                matchTwo(rgb,element);
+                break;
+            case "sq6":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[5]);
+                matchTwo(rgb,element);
+                break;
+            case "sq7":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[6]);
+                matchTwo(rgb,element);
+                break;
+            case "sq8":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[7]);
+                matchTwo(rgb,element);
+                break;
+            case "sq9":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[8]);
+                matchTwo(rgb,element);
+                break;
+            case "sq10":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[9]);
+                matchTwo(rgb,element);
+                break;
+            case "sq11":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[10]);
+                matchTwo(rgb,element);
+                break;
+            case "sq12":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[11]);
+                matchTwo(rgb,element);
+                break;
+            case "sq13":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[12]);
+                matchTwo(rgb,element);
+                break;
+            case "sq14":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[13]);
+                matchTwo(rgb,element);
+                break;
+            case "sq15":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[14]);
+                matchTwo(rgb,element);
+                break;
+            case "sq16":
+                grid_index = Number(elem_id.split('sq')[1]) - 1;
+                rgb = grid[grid_index];
+                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                console.log(grid[15]);
+                matchTwo(rgb,element);
+                break;
+            default:
+                //default
+        }
+    };
+
+    /*$('.square').click(function (e) {
+        this.backgroundColor = 'rbg' + grid[0].join(',') + ')';
+    });*/
+
+</script>
+</body>
+</html>
