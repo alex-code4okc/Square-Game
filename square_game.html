@@ -96,7 +96,9 @@
         }
         else {
             if (clickedDivArray.length == 1) {
+                console.log('second button clicked')
                 clickedDivArray.push(clickedDiv);//clickedDivArray should now me of length 2
+                console.log(clickedDivArray)
                 //clickedDiv is the unique div that was clicked. Comparison is uniqueness of element, not color
                 if (clickedDivArray[0] == clickedDivArray[1]) {//if the same div clicked again, pop off the second instance
                     clickedDivArray.pop();//clickedDivArray is now of length 1
@@ -111,7 +113,8 @@
                         clickedDivArray = new Array();
 
                     }
-                    else {
+                    else { //elements did not share the same background color
+                        console.log('elements did not match')
                         console.log(clickedDivArray[1].style.backgroundColor);
                         //divs did not match in color
                         current_color = clickedDivArray[1].style.backgroundColor;
@@ -128,7 +131,7 @@
             }//end logical check: clickedDivArray.length == 1
         }
     }//end of matchTwo function
-    
+
    /* function matchTwo(color_value, clickedDiv) {
 
         if (firstClicked == undefined) {
@@ -186,7 +189,8 @@
             case "sq1":
                 grid_index = Number(elem_id.split('sq')[1])-1;
                 rgb = grid[grid_index];
-                element.style.backgroundColor = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
+                current_element_color = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'
+                setTimeout(setColor(element,current_element_color),1000);
                 console.log(grid[0]);
                 matchTwo(rgb,element);
                 break;
