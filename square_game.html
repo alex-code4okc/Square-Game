@@ -9,6 +9,8 @@
 </head>
 
 <body>
+    <div></div>
+    <div></div>
     <div class="container">
         <div class="row">
             <div id="sq1" class="square" onclick="colorSelector(this)"></div>
@@ -69,7 +71,7 @@
         //shuffles the color_array
         color_array = shuffle(color_array);
 
-        //grid will contain 16 random colors, 8 of them unique
+        //grid will contain 16 random colors, represented as arrays [r,b,g], 8 of them unique
         for (i = 0; i < color_array.length; i++) {
             grid.push(color_array[i]);
             //shuffles the grid array
@@ -82,6 +84,7 @@
 
         //globals
         var firstClicked, secondClicked, clickedDivArray = new Array(), matched_array = new Array(16);
+        var index1, index2;
 
         //an array with 16 elements all of them false
         matched_array.fill(false);
@@ -90,11 +93,12 @@
             elem.style.backgroundColor = newColor;
         }
 
-        function matchTwo(color_value, clickedDiv) {
+        function matchTwo(color_value, clickedDiv,grid_index) {
 
             if (clickedDivArray.length == 0) {
                 clickedDivArray.push(clickedDiv);
                 console.log('first button clicked');
+                index1 = grid_index;
             }
             else {
                 if (clickedDivArray.length == 1) {
@@ -104,28 +108,34 @@
                     //clickedDiv is the unique div that was clicked. Comparison is uniqueness of element, not color
                     if (clickedDivArray[0] == clickedDivArray[1]) {//if the same div clicked again, pop off the second instance
                         clickedDivArray.pop();//clickedDivArray is now of length 1
+                        console.log('clicked same element again');
                     } else {//clickedDivs were unique
 
                         if (clickedDivArray[0].style.backgroundColor == clickedDivArray[1].style.backgroundColor) {
                             //both elements clicked share same background color
+                            index2 = grid_index;
                             console.log("both elements have the same color!")
-                            index1 = grid.indexOf(clickedDivArray[0].style.backgroundColor);
-                            index2 = grid.lastIndexOf(clickedDivArray[1].style.backgroundColor);
+                            //index1 = grid.indexOf(clickedDivArray[0].style.backgroundColor);
+                            //index2 = grid.lastIndexOf(clickedDivArray[1].style.backgroundColor);
+                            console.log(index1,index2);
+
                             matched_array[index1] = true;
                             matched_array[index2] = true;
 
                             //clickedDivArray is reset
                             clickedDivArray = new Array();
-
+                            //indexes are reset
+                            index1, index2 = -1;
                         }
                         else { //elements did not share the same background color
                             console.log('elements did not match')
                             console.log(clickedDivArray[1].style.backgroundColor);
                             //divs did not match in color
-                            current_color = clickedDivArray[1].style.backgroundColor;
+                            //current_color = clickedDivArray[1].style.backgroundColor;
+                            //setColor(clickedDiv,current_color);
                             //setTimeout(setColor(clickedDivArray[1], current_color), 1000);
-                            setTimeout(setColor(clickedDivArray[0], 'dimgrey'), 1000);
-                            setTimeout(setColor(clickedDivArray[1], 'dimgrey'), 1000);
+                            setTimeout(setColor,1000, clickedDivArray[0], 'dimgrey');
+                            setTimeout(setColor,1000, clickedDivArray[1], 'dimgrey');
                             //setTimeout(clickedDivArray[1].style.backgroundColor = 'dimgrey', 1000);
                             console.log(clickedDivArray[1].style.backgroundColor);
                             clickedDivArray = new Array();
@@ -135,18 +145,33 @@
 
                 }//end logical check: clickedDivArray.length == 1
             }
+        //console.log('fell out of ')
+        console.log('falling out of matchTwo function')
         }//end of matchTwo function
 
+        //if a div element has already been matched ignore it! this is where the matched_array would come into play
         function colorSelector(element) {
             elem_id = element.id;
             grid_index = Number(elem_id.split('sq')[1]) - 1;
-            rgb = grid[grid_index];
-            current_element_color = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'
-            setTimeout(setColor(element, current_element_color), 1000);
-            console.log(grid[0]);
-            matchTwo(rgb, element);
+            console.log(matched_array);
+            if (matched_array[grid_index]!=true) {
+                rgb = grid[grid_index];
+                current_element_color = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'
+                setColor(element, current_element_color);
+                //console.log(grid[0]);
+                console.log('element background color changed to '+current_element_color);
+                matchTwo(rgb, element,grid_index);
+            } else {
+                console.log('do nothing!')
+            }
+            
         }
 
+    if (matched_array.includes(false)){
+        console.log('not finished yet')
+    } else {
+
+    }
     /*$('.square').click(function (e) {
         this.backgroundColor = 'rbg' + grid[0].join(',') + ')';
     });*/
